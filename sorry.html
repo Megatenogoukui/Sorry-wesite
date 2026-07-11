@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shaani</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Mulish:wght@300;400;500;600&display=swap');
+
+  :root{
+    --bg-deep:#12142a;
+    --bg-mid:#1b1f3d;
+    --rose:#e8b8c6;
+    --gold:#d9b66a;
+    --cream:#f4ecdd;
+    --lavender:#a89bd0;
+    --line: rgba(244,236,221,0.14);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: radial-gradient(ellipse at 50% -10%, var(--bg-mid), var(--bg-deep) 65%);
+    color:var(--cream);
+    font-family:'Mulish', sans-serif;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001s !important; animation-iteration-count:1 !important; transition-duration:0.001s !important; scroll-behavior:auto !important;}
+  }
+
+  a, button{ font-family:inherit; }
+
+  /* starfield */
+  #stars{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+  }
+  .star{
+    position:absolute; background:var(--cream); border-radius:50%;
+    opacity:0.5; animation:twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:0.15;}
+    50%{opacity:0.9;}
+  }
+
+  section{
+    position:relative; z-index:1;
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:8vh 6vw;
+    text-align:center;
+  }
+
+  .eyebrow{
+    font-size:0.72rem; letter-spacing:0.32em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin-bottom:1.4rem;
+    opacity:0.85;
+  }
+
+  h1.name{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:clamp(3.5rem, 13vw, 8.5rem);
+    line-height:0.95;
+    letter-spacing:0.01em;
+    background: linear-gradient(180deg, var(--cream) 0%, var(--rose) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  .subtitle{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:clamp(1.15rem, 2.6vw, 1.6rem);
+    color:var(--lavender);
+    margin-top:1.6rem;
+    letter-spacing:0.01em;
+  }
+
+  .scroll-hint{
+    position:absolute; bottom:6vh; left:50%; transform:translateX(-50%);
+    font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--cream); opacity:0.4;
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+  }
+  .scroll-hint .stem{
+    width:1px; height:30px; background:var(--cream); opacity:0.5;
+    animation:stemPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes stemPulse{
+    0%,100%{transform:scaleY(1); opacity:0.3;}
+    50%{transform:scaleY(1.3); opacity:0.7;}
+  }
+
+  /* planet hero */
+  .planet-wrap{
+    width:min(60vw, 300px); aspect-ratio:1/1; margin:3rem auto 0;
+    position:relative;
+  }
+  svg{width:100%; height:100%; overflow:visible;}
+
+  .reveal{
+    opacity:0; transform:translateY(28px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .reveal.in{
+    opacity:1; transform:translateY(0);
+  }
+
+  .content-block{
+    max-width:640px;
+  }
+
+  h2.section-title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    color:var(--cream);
+    margin-bottom:2rem;
+  }
+
+  p.letter{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(1.15rem, 2.4vw, 1.5rem);
+    line-height:1.75;
+    color:var(--cream);
+    opacity:0.92;
+    margin-bottom:1.6rem;
+    font-weight:400;
+  }
+
+  .divider{
+    width:40px; height:1px; background:var(--gold); opacity:0.6;
+    margin:2.2rem auto;
+  }
+
+  /* orbit section */
+  .orbit-stage{
+    width:min(70vw, 340px); aspect-ratio:1/1;
+    position:relative; margin:2.5rem auto 3.5rem;
+    cursor:pointer;
+  }
+  .orbit-ring{
+    position:absolute; inset:0; border:1px solid var(--line);
+    border-radius:50%;
+  }
+  .orbit-dot{
+    position:absolute; width:12px; height:12px; border-radius:50%;
+    background:var(--rose); box-shadow:0 0 14px 3px rgba(232,184,198,0.6);
+    top:50%; left:50%;
+    transform-origin:0 0;
+    animation:orbit 9s linear infinite;
+  }
+  @keyframes orbit{
+    from{ transform: rotate(0deg) translateX(calc(min(35vw,170px))) rotate(0deg); }
+    to{ transform: rotate(360deg) translateX(calc(min(35vw,170px))) rotate(-360deg); }
+  }
+
+  .orbit-msg{
+    position:absolute; bottom:-3rem; left:50%; transform:translateX(-50%);
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:1.1rem; color:var(--gold);
+    opacity:0; transition:opacity 0.6s ease;
+    white-space:nowrap;
+  }
+  .orbit-msg.show{ opacity:1; }
+
+  .orbit-hint{
+    font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--lavender); opacity:0.55; margin-top:0.5rem;
+  }
+
+  /* reasons list */
+  .reasons{
+    list-style:none;
+    display:flex; flex-direction:column; gap:1.3rem;
+    max-width:560px; margin:0 auto;
+  }
+  .reasons li{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(1.1rem, 2.3vw, 1.4rem);
+    color:var(--cream);
+    opacity:0.9;
+    padding-left:1.6rem;
+    position:relative;
+    text-align:left;
+    line-height:1.5;
+  }
+  .reasons li::before{
+    content:"—";
+    position:absolute; left:0; color:var(--rose); opacity:0.7;
+  }
+
+  /* closing */
+  .signoff{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--gold);
+    font-size:1.3rem;
+    margin-top:2.2rem;
+    letter-spacing:0.02em;
+  }
+
+  .final-name{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(2.4rem, 8vw, 5rem);
+    font-weight:500;
+    margin-top:1rem;
+    background: linear-gradient(180deg, var(--rose), var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  footer{
+    text-align:center; padding:4rem 1rem 3rem;
+    font-size:0.75rem; letter-spacing:0.1em;
+    color:var(--lavender); opacity:0.4;
+  }
+
+  :focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:4px;
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="eyebrow reveal in">for my shaani</div>
+  <h1 class="name reveal in">Shaani</h1>
+  <div class="subtitle reveal in">my Dumboo. my always.</div>
+
+  <div class="planet-wrap reveal in">
+    <svg viewBox="0 0 300 300">
+      <defs>
+        <radialGradient id="planetGrad" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stop-color="#f4ecdd"/>
+          <stop offset="45%" stop-color="#d9b66a"/>
+          <stop offset="100%" stop-color="#a3763f"/>
+        </radialGradient>
+        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#e8b8c6" stop-opacity="0.15"/>
+          <stop offset="50%" stop-color="#e8b8c6" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#e8b8c6" stop-opacity="0.15"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="150" cy="150" rx="135" ry="34" fill="none" stroke="url(#ringGrad)" stroke-width="2.5" transform="rotate(-12 150 150)"/>
+      <ellipse cx="150" cy="150" rx="112" ry="27" fill="none" stroke="url(#ringGrad)" stroke-width="1.5" opacity="0.7" transform="rotate(-12 150 150)"/>
+      <circle cx="150" cy="150" r="62" fill="url(#planetGrad)"/>
+    </svg>
+  </div>
+
+  <div class="scroll-hint"><span>keep going</span><span class="stem"></span></div>
+</section>
+
+<!-- APOLOGY -->
+<section id="sorry">
+  <div class="content-block">
+    <div class="eyebrow reveal">i'm sorry</div>
+    <h2 class="section-title reveal">I got it wrong.</h2>
+    <p class="letter reveal">Yesterday was your last day at office. You were so excited — and instead of being fully there with you in that, I let myself get upset over you being late. That wasn't fair to you, and it definitely wasn't fair to that day.</p>
+    <p class="letter reveal">I keep replaying it. I hate that I made you feel that, even for a moment, on a day that was supposed to be all yours.</p>
+    <p class="letter reveal">We both get things wrong sometimes, that's just true. But this one was on me, and I'm not going to dress it up as anything else.</p>
+    <div class="divider reveal"></div>
+  </div>
+</section>
+
+<!-- ORBIT -->
+<section id="orbit">
+  <div class="content-block">
+    <div class="eyebrow reveal">a promise</div>
+    <h2 class="section-title reveal">i'm not going anywhere</h2>
+    <p class="letter reveal">I'm not going anywhere. Not now, not later, not ever.</p>
+    <p class="letter reveal">No matter how difficult life gets, no matter what — I'm staying right here with you. In your orbit, always.</p>
+
+    <div class="orbit-stage reveal" id="orbitStage" role="button" tabindex="0" aria-label="Tap to see a message">
+      <div class="orbit-ring"></div>
+      <div class="orbit-dot" id="orbitDot"></div>
+      <div class="orbit-msg" id="orbitMsg">still here. still yours.</div>
+    </div>
+    <div class="orbit-hint reveal">tap the light</div>
+  </div>
+</section>
+
+
+<!-- REASONS -->
+<section id="reasons">
+  <div class="content-block">
+    <div class="eyebrow reveal">everything, honestly</div>
+    <h2 class="section-title reveal">why it's you</h2>
+    <ul class="reasons">
+      <li class="reveal">the way you make ordinary days feel like something worth remembering</li>
+      <li class="reveal">how safe it feels to be exactly myself around you</li>
+      <li class="reveal">your laugh — I'd give up a lot just to keep hearing it</li>
+      <li class="reveal">how you make the hard days smaller just by being there</li>
+      <li class="reveal">honestly, all of it. I wasn't exaggerating when I said everything</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section id="closing">
+  <div class="content-block">
+    <div class="eyebrow reveal">forever, no matter what</div>
+    <p class="letter reveal">I love you more than I say out loud, Shaani. Not just today, not just when it's easy — always. Whatever comes, you'll have me standing next to you, not walking away from you.</p>
+    <p class="letter reveal">I'm sorry. I love you. I'm not going anywhere.</p>
+    <div class="signoff reveal">— always yours</div>
+    <div class="final-name reveal">Shaani</div>
+  </div>
+</section>
+
+<footer>made quietly, meant fully</footer>
+
+<script>
+  // starfield generation
+  const starsContainer = document.getElementById('stars');
+  const starCount = window.innerWidth < 600 ? 60 : 120;
+  for(let i=0;i<starCount;i++){
+    const s = document.createElement('div');
+    s.className='star';
+    const size = Math.random()*2 + 0.6;
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.top = Math.random()*100+'vh';
+    s.style.left = Math.random()*100+'vw';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    s.style.animationDuration = (3+Math.random()*3)+'s';
+    starsContainer.appendChild(s);
+  }
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal:not(.in)');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.2});
+  revealEls.forEach(el=>io.observe(el));
+
+  // orbit interaction
+  const stage = document.getElementById('orbitStage');
+  const msg = document.getElementById('orbitMsg');
+  const dot = document.getElementById('orbitDot');
+  function triggerMsg(){
+    msg.classList.add('show');
+    dot.style.boxShadow = '0 0 24px 8px rgba(232,184,198,0.9)';
+    setTimeout(()=>{
+      msg.classList.remove('show');
+      dot.style.boxShadow = '';
+    }, 2600);
+  }
+  stage.addEventListener('click', triggerMsg);
+  stage.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter' || e.key===' '){ e.preventDefault(); triggerMsg(); }
+  });
+</script>
+
+</body>
+</html>
